@@ -1,7 +1,7 @@
 edit: main.o add.o sub.o mul.o dev.o print.o
 	gcc -o edit main.o add.o sub.o mul.o dev.o print.o
 
-main.o: main.c main.h
+main.o: main.c main.h recipes.h print_data.h
 	gcc -c main.c
 add.o : add.c recipes.h
 	gcc -c add.c

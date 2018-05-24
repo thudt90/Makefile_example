@@ -6,18 +6,19 @@
 
 int main(int argc, char const *argv[])
 {
-    int first_val = 0;
-    int second_val = 0;
+    int first_val = 9;
+    int second_val = 3;
     int result;
 
     printf("argc: %d, %s, %s, %s\n", argc, argv[0], argv[1], argv[2]);
 
-    if(argc == 3)
-    {
-        first_val = isdigit(argv[1]);
-        second_val = isdigit(argv[2]);
-    }
+    // if(argc == 3)
+    // {
+    //     first_val = isdigit(argv[1]);
+    //     second_val = isdigit(argv[2]);
+    // }
 
+    printf("first: %d, snd: %d\n", first_val, second_val);
     if (first_val != 0)
     {
         result = sum_two_num(first_val, second_val);
