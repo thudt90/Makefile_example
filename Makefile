@@ -1,5 +1,5 @@
 edit: main.o add.o sub.o mul.o dev.o print.o
-	gcc -o main.o add.o sub.o mul.o dev.o print.o
+	gcc -o edit main.o add.o sub.o mul.o dev.o print.o
 
 main.o: main.c main.h
 	gcc -c main.c
