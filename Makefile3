@@ -1,0 +1,18 @@
+OBJ := $(patsubst %.c,%.o,$(wildcard *.c))
+
+SRC = $(wildcard *.c)
+CC  = gcc
+
+INC_H= -I
+HEADER = main.h recipes.h print_data.h
+
+edit: $(OBJ)
+	$(CC) -o edit $(OBJ)
+	@echo $(SRC)
+
+%.o: %.c
+	$(CC) -c $^ -o $@
+
+clean :
+	rm edit $(OBJ)
+

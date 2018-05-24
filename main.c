@@ -10,7 +10,7 @@ int main(int argc, char const *argv[])
     int second_val = 3;
     int result;
 
-    printf("argc: %d, %s, %s, %s\n", argc, argv[0], argv[1], argv[2]);
+    // printf("argc: %d, %s, %s, %s\n", argc, argv[0], argv[1], argv[3]);
 
     // if(argc == 3)
     // {
@@ -18,9 +18,9 @@ int main(int argc, char const *argv[])
     //     second_val = isdigit(argv[2]);
     // }
 
-    printf("first: %d, snd: %d\n", first_val, second_val);
-    if (first_val != 0)
-    {
+    // printf("first: %d, snd: %d\n", first_val, second_val);
+    // if (first_val != 0)
+    // {
         result = sum_two_num(first_val, second_val);
         print_val(ADD, result);
 
@@ -32,7 +32,7 @@ int main(int argc, char const *argv[])
 
         result = dev_two_num(first_val, second_val);
         print_val(DEV, result);
-    }
+    // }
 
     if (argv[0] != 0)
     {
