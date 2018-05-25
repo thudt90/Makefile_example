@@ -221,68 +221,10 @@ Ví dụ 4:
 
 
 
-Makefile
-- Works in two distinct phases: read-in and target-update
-- when the recipe start with '@', not print this recipe.
-   when used command "make -n" or "make --just-print" -> only print recipe,without executing
-   when used command "make -s" or "make --silent" -> only executing, without print
-- Variable
-	is a string, not ':', '#', '=', whitespace
-	are case-sensitive
-- Assign variable: '=', ':=', '?='
-- Function wildcard
-	src:=$(wildcard *.c)#is to get a list of all the C source files in a directory or
-	src:=$(shell echo *.c)
 
-- if condition
-	ifeq else endif
-	ifneq else endif
-	ifdef else endif
-	ifndef else endif
-	Example:
-		BIND=
-		ifeq ($(BIND),)
-			@echo "ì abc"
-		else
-			@echo "else abc"
-		endif
-		+ Result: ì abc
 
-	BIND=cc
-	ifeq ($(BIND),)
-		@echo "if abc"
-	else
-		@echo "else abc"
-	endif
-	+ Result: else abc
 
-	bar =
-	foo = $(bar)
-	ifdef foo
-		frobozz = yes
-	else
-		frobozz = no
-	endif
-	+ Result: yes
 
-	foo =
-	ifdef foo
-		frobozz = yes
-	else
-		frobozz = no
-	endif
-	+ Result: no
-
-- Implicit rules
-	Common variables used as programms in build:
-	+ AS: assembly file. default: as
-	+ CC: c program. default: gcc
-	+ CXX: c++ program. default: g++
-	+ CPP: C preprocessor. default: $(CC) -E
-- Automatic variables: used in  recipe
-	+ $@: file name of the target
-	+ $<: name of the first prerequisite
-	+ $^: the name of prerequisite
 
 
 - Great lib.a: http://stackoverflow.com/questions/9593286/creating-a-library-file-in-makefile-and-compiling-after-that
@@ -296,20 +238,4 @@ Makefile
   or
 	gcc -shared -o libhello.so -fPIC hello.c
 
-
-#
-# CL_*  Compile and link
-# CC_*  Compile C/C++ source to an object file
-# AS_*  Assemble something to an object file
-# AR_*  Generate an object file library (archive)
-# LR_*  Link a list of objects/libraries to a relocatable object file
-# LD_*  Link a list of objects/libraries to a executable/shared object
-# UM_*  Add a usage message to an executable
-# PB_*  Add PhAB resources to an executable using "phabbind"
-#
-
-- Get current folder{
-	PWD_HOST = /bin/pwd
-	PWD := $(shell $(PWD_HOST))
-}
 
