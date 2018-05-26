@@ -8,20 +8,21 @@ Makefile là một đoạn mã (scrip) dùng để thực thì một vài nhiệ
 		recipe
 		…
 		…
-  - target thông thường tạo ra một file: file thực thi hoặc file object; cũng có thể là một hành động như clean.
-  - prerequisite là file sử dụng như ngõ vào để tạo ra target. Target thông thường phụ thuộc vào một vài file.
-  - recipe là hành động make thực hiện. Một recipe có một hay nhiều command.
+
+  - **target** thông thường tạo ra một file: file thực thi hoặc file object; cũng có thể là một hành động như clean.
+  - **prerequisite** là file sử dụng như ngõ vào để tạo ra target. Target thông thường phụ thuộc vào một vài file.
+  - **recipe** là các bước cần thiết để tạo **target**. Một recipe có một hay nhiều bước.
+
 **Note**: Bạn phải dùng "tab" để bắt đầu một dòng recipe!
 
 
 # How
 
 ## Ví dụ đơn giản
-Một makefile đơn giản được viết để tạo ra file thực thi _edit_ như sau:
+Một _makefile_ đơn giản được viết để tạo ra file thực thi _edit_ như sau:
 
 >edit: main.o add.o sub.o mul.o dev.o print.o
     gcc -o edit main.o add.o sub.o mul.o dev.o print.o
-
 main.o: main.c main.h recipes.h print_data.h
     gcc -c main.c
 add.o : add.c recipes.h
@@ -34,7 +35,6 @@ dev.o : dev.c recipes.h
     gcc -c dev.c
 print.o : print.c print_data.h main.h
     gcc -c print.c
-
 clean :
     rm edit main.o add.o sub.o mul.o dev.o print.o
 
@@ -48,12 +48,12 @@ Lệnh để xóa những file object và file thực thi
 	make clean
 
 ** Giải thích **
-Trong ví dụ trên, targets của makefile là file thực thi _edit_ và các object files _main.o_ and _print.o_ ... Các file prerequisite là _main.c_ và _main.h_. Recipe là _cc -c main.c_.
+Trong ví dụ trên, _targets_ của makefile là file thực thi _edit_ và các object files _main.o_ and _print.o_ ... Các file _prerequisite_ là _main.c_ và _main.h_. Recipe là _cc -c main.c_.
 
-Target _clean_ không phải là một file mà là một hành động (_phony targets_). Nó không cần prerequisite và _make_ sẽ không bao giờ thực hiện hành động này nếu không nói chính xác - _make clean_.
+Target _clean_ không phải là một file mà là một hành động (_phony targets_). Nó không cần _prerequisite_ và _make_ sẽ không bao giờ thực hiện hành động này nếu không nói chính xác - _make clean_.
 
-Theo lý thuyết, _make_ bắt đầu với target đầu tiên, goi là default goal. Trong ví dụ default goal là update file thực thi _edit_.
-_make_ đọc makefile trong thư mục hiện tại và bắt đầu với rule đầu tiên, relink _edit_; nhưng phải thực hiện các rule cho các file mà _edit_ phụ thuộc, trong ví dụ là các file object. Mỗi file object lại phụ thuộc vào các luật riêng của file đó.
+Theo lý thuyết, _make_ bắt đầu với target đầu tiên, goi là _default goal_. Trong ví dụ trên default goal là update file thực thi _edit_.
+_make_ đọc makefile trong thư mục hiện tại và bắt đầu với rule đầu tiên, relink _edit_; nhưng file _edit_ lại phụ thuộc vào các file _object_. Mỗi _object_ lại phụ thuộc vào các lệnh riêng của file đó.
 Biên dịch lại phải được thực hiện nếu có sự thay đổi source file hay header file trong prerequisites hay file object file không tồn tại.
 
 ## Write makefile
@@ -113,20 +113,25 @@ Biến trong makefile là một chuỗi nhưng không có các ký tự như ':'
 
 Có cách khác để lấy list các file mà không sợ thiếu file
 
+	src := $(wildcard *.c)
+
+Từ khóa _$(wildcard *.c)_ sẽ trả về list các _file.c_ trong thư mục hiện tại
+Than khảo thêm về [wildcard](https://www.gnu.org/software/make/manual/html_node/Wildcards.html)
 
 	objects := $(patsubst %.c,%.o,$(wildcard *.c))
 
+Câu lệnh lấy tên các file _file.c_ và chuyển tên _file.o_ sau đó gán vào biến _objects_.
 
-Câu lệnh chuyển list các file C thành list các file object sau đó gán vào biến _objects_.
-Than khảo thêm về [wildcard] (https://www.gnu.org/software/make/manual/html_node/Wildcards.html)
 
 #### Implicit rules
 Một vài biến thông dụng hay sử dụng trong makefile
 
-- AS: assembly file. default: as
-- CC: c program. default: gcc
-- CXX: c++ program. default: g++
-- CPP: C preprocessor. default: $(CC) -E
+- AS: Trình biên dịch ngôn ngữ asembly. default: as
+- CC: Trình biên dịch ngôn ngữ C. default: gcc hay cc
+- CPP: Trình biên dịch ngôn ngữ c++ program. default: g++
+- ASFLAG : tham số cho AS. Default là = rv
+- CCFLAG : tham số cho CC. Default là rỗng
+- CPPFLAG : tham số cho AS. Default là rỗng
 
 ### Automatic variables
 Automatic variables: sử dụng trong recipe
@@ -139,26 +144,28 @@ Ví dụ:
 	foo.o : foo.c
 		cc -c $^ -o $@
 
-Trên đây là một vài biến Automatic variables thông dụng, tham khảo thêm về [Automatic variables] (https://www.gnu.org/software/make/manual/make.html#Automatic-Variables)
+Trên đây là một vài biến Automatic variables thông dụng, tham khảo thêm về [Automatic variables](https://www.gnu.org/software/make/manual/make.html#Automatic-Variables)
 
 ### Link lib
-For example, if there is a /usr/lib/libcurses.a library on your system (and no /usr/lib/libcurses.so file), then
+Theo ví dụ dưới, nếu có có file lib /usr/lib/libcurses.a (và không có file /usr/lib/libcurses.so ),
 
 	foo : foo.c -lcurses
-		cc $^ -o $@
+		cc -c $^ -o $@
 
-Would cause the command ‘cc foo.c /usr/lib/libcurses.a -o foo’ to be executed when foo is older than foo.c or than /usr/lib/libcurses.a.
+Câu lệnh trên sẽ thực hiện _‘cc foo.c /usr/lib/libcurses.a -o foo’_ để tạo file thực thi _foo_ khi _foo_ cũ hơn _foo.c_ hoặc _/usr/lib/libcurses.a_.
 
 ### Pattern Rules
-pattern rule chứa ký tự '%' trong target và prerequisite.
+Quay lại ví dụ với makefile trên, ta thấy cần khai báo các target cho từng file object. Gỉa sử ta có một ứng dụng có số mã nguông lớn thì việc tạo makefile sẽ rất vất vả. Makefile cung cấp một số luật mẫu (pattern rule) kết hợp với biến tự động (Automatic variables) sẽ giảm bớt công việc cần phải làm.
+Một pattern rule thông dụng là '%', xuất hiện trong _target_ và _prerequisite_.
 Ví dụ, '%.c' tượng trưng cho tất cả các file có tên kết thúc bằng '.c'.
 Lúc đó target có thể viết lại như sau:
 
 	%.o : %.c
 		recipe...
 
-Xác định file _n_.o, với file _n_.c trong prerequisite, cung cấp _n_.c tồn tại.
-Ví dụ:
+Xác định file _n_.o, với file _n_.c trong prerequisite.
+
+Ví dụ (kết hợp pattern rule và Automatic variables):
 
 	%.o : %.c
 		$(CC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@
